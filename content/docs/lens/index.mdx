@@ -47,8 +47,14 @@ import { LensProvider, DataTable } from '@locospec/lens-react';
 
 function App() {
   return (
-    <LensProvider data={data}>
-      <DataTable columns={columns} />
+    <LensProvider lensConfiguration={lensConfiguration}>
+        <View viewConfiguration={viewConfiguration}>
+            <DataTable  
+                selectedItems={checkedIds}
+                onSelect={handleSelectionChange}
+                variant="vanilla"
+            />
+        </View>    
     </LensProvider>
   );
 }
