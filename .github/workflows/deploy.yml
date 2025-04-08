@@ -18,4 +18,4 @@ jobs:
           folder: ./out/
           branch: gh-pages
           clean-exclude: pr-preview
-          force: false
+          force: true
