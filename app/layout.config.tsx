@@ -30,8 +30,8 @@ export const baseOptions: BaseLayoutProps = {
   },
   links: [
     {
-      text: "Posts",
-      url: "/posts",
+      text: "Docs",
+      url: "/docs",
     },
   ],
 };
