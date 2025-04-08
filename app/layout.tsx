@@ -18,8 +18,8 @@ const geistMono = localFont({
 
 export const metadata = createMetadata({
   title: {
-    template: "%s | rjv.im",
-    default: "rjv.im",
+    template: "%s | locospec",
+    default: "locospec",
   },
   description: description,
   metadataBase: baseUrl,

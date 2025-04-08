@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 
 export const ohimgConfig: OhImgBaseTemplateProps = {
   content: {
-    title: "rjv.im",
+    title: "locospec",
     description:
       "work, open source projects, thoughts, ideas, commentary and opinions.",
-    website: "rjv.im",
+    website: "locospec",
     // tags: ["personal", "website"],
     // logoSrc: "/avatar.png",
   },

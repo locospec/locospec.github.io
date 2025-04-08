@@ -70,7 +70,7 @@ export default function Hero() {
             </h1>
 
             <p className="text-lg md:text-xl leading-relaxed tracking-tight text-muted-foreground max-w-2xl text-center">
-              Welcome to rjv.im - This is where I articulate my work, open
+              Welcome to locospec - This is where I articulate my work, open
               source projects,thoughts, ideas, work, commentary and opinions.
             </p>
           </div>

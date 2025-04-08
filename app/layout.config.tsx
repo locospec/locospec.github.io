@@ -2,7 +2,7 @@ import { Icons } from "@/components/icons";
 import type { BaseLayoutProps, LinkItemType } from "fumadocs-ui/layouts/shared";
 import Image from "next/image";
 
-export const title = "rjv.im";
+export const title = "locospec";
 export const description =
   "Personal website of Rajiv. This is where I articulate my work, open source projects, thoughts, ideas, work, commentary and opinions.";
 export const owner = "Rajiv";
@@ -24,7 +24,7 @@ export const baseOptions: BaseLayoutProps = {
           alt="Logo"
           className="rounded-full"
         />
-        rjv.im
+        locospec
       </>
     ),
   },
