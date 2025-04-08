@@ -3,6 +3,9 @@
 import { baseOptions } from "@/app/layout.config";
 import { GridBackground } from "./grid-background";
 import { Icons } from "./icons";
+import { cn } from "@/lib/utils";
+import React from "react";
+import Link from "next/link";
 
 export type FooterNavigationItem = {
   name: string;
@@ -24,6 +27,71 @@ export type FooterNavigationProps = {
   companyName?: string;
   companyDescription?: string;
 };
+
+function Grid({
+  cellSize = 12,
+  strokeWidth = 1,
+  patternOffset = [0, 0],
+  className,
+}: {
+  cellSize?: number;
+  strokeWidth?: number;
+  patternOffset?: [number, number];
+  className?: string;
+}) {
+  const id = React.useId();
+
+  return (
+    <svg
+      className={cn(
+        "pointer-events-none absolute inset-0 text-black/10",
+        className
+      )}
+      width="100%"
+      height="100%"
+    >
+      <defs>
+        <pattern
+          id={`grid-${id}`}
+          x={patternOffset[0] - 1}
+          y={patternOffset[1] - 1}
+          width={cellSize}
+          height={cellSize}
+          patternUnits="userSpaceOnUse"
+        >
+          <path
+            d={`M ${cellSize} 0 L 0 0 0 ${cellSize}`}
+            fill="transparent"
+            stroke="currentColor"
+            strokeWidth={strokeWidth}
+          />
+        </pattern>
+      </defs>
+      <rect fill={`url(#grid-${id})`} width="100%" height="100%" />
+    </svg>
+  );
+}
+
+export function Banner() {
+  return (
+    <div className="relative isolate flex flex-col justify-between gap-3 overflow-hidden rounded-lg border border-green-600/15 bg-gradient-to-r from-lime-100/80 to-emerald-100/80 py-3 px-12 sm:flex-row sm:items-center sm:py-2">
+      <Grid
+        cellSize={13}
+        patternOffset={[0, -1]}
+        className="text-black/30 mix-blend-overlay [mask-image:linear-gradient(to_right,black,transparent)] md:[mask-image:linear-gradient(to_right,black_60%,transparent)]"
+      />
+
+      <div className="flex items-center gap-3">
+        <p className="text-sm text-gray-900">
+          Built and actively maintained by{" "}
+          <Link href="https://teurons.com" className="font-semibold underline">
+            Teurons
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function BigFooter({
   solutions,
@@ -138,11 +206,12 @@ export default function BigFooter({
             </div>
           </div>
         </div>
-        <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
+        <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 flex flex-col md:flex-row gap-2 items-center justify-between">
           <p className="text-sm/6 text-gray-600">
             &copy; {new Date().getFullYear()} {companyName}. All rights
             reserved.
           </p>
+          <Banner />
         </div>
       </div>
     </footer>
