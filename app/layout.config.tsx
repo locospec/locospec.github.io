@@ -1,5 +1,6 @@
 import { Icons } from "@/components/icons";
 import type { BaseLayoutProps, LinkItemType } from "fumadocs-ui/layouts/shared";
+import { WorkflowIcon } from "lucide-react";
 import Image from "next/image";
 
 export const title = "locospec";
@@ -17,14 +18,8 @@ export const baseOptions: BaseLayoutProps = {
   nav: {
     title: (
       <>
-        <Image
-          src="/avatar.png"
-          width={24}
-          height={24}
-          alt="Logo"
-          className="rounded-full"
-        />
-        locospec
+        <WorkflowIcon />
+        Locospec
       </>
     ),
   },
