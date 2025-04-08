@@ -9,7 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm i pnpm --global && pnpm i && pnpm run build
+      - name: Build site
+        run: npm i pnpm --global && pnpm i && pnpm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: locospec.com
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ./out/
