@@ -8,7 +8,7 @@ jobs:
   deploy-main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build site
         run: npm i pnpm --global && pnpm i && pnpm run build
         env:
