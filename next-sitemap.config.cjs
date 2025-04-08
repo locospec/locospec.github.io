@@ -6,6 +6,7 @@ const baseUrl =
     : new URL(`https://${process.env.NEXT_PUBLIC_SITE_URL}`);
 
 module.exports = {
+  outDir: "out",
   siteUrl: baseUrl,
   generateRobotsTxt: true,
   transform: async (config, path) => {
