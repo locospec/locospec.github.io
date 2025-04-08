@@ -5,7 +5,12 @@ const baseUrl =
     ? new URL("https://localhost:3000")
     : new URL(`https://${process.env.NEXT_PUBLIC_SITE_URL}`);
 
-console.log("baseUrl", baseUrl, process.env.NODE_ENV);
+console.log(
+  "baseUrl",
+  baseUrl,
+  process.env.NODE_ENV,
+  process.env.NEXT_PUBLIC_SITE_URL
+);
 
 module.exports = {
   siteUrl: baseUrl,
