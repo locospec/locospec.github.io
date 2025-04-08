@@ -4,8 +4,8 @@ import Image from "next/image";
 
 export const title = "locospec";
 export const description =
-  "Personal website of Rajiv. This is where I articulate my work, open source projects, thoughts, ideas, work, commentary and opinions.";
-export const owner = "Rajiv";
+  "Personal website of Locospec. This is where I articulate my work, open source projects, thoughts, ideas, work, commentary and opinions.";
+export const owner = "LoCoSpec";
 /**
  * Shared layout configurations
  *
