@@ -45,7 +45,7 @@ export type Icon = typeof LucideIcon;
 
 export const Icons = {
   computer: Computer,
-  logo: Code,
+  // logo: Code,
   close: X,
   menu: Menu,
   code: Code,
@@ -81,6 +81,29 @@ export const Icons = {
   chevronDown: ChevronDown,
   mail: Mail,
   send: SendHorizonal,
+  logo: ({ ...props }: LucideProps) => (
+    <svg
+      width={400}
+      height={400}
+      viewBox="0 0 400 400"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M135 50C154.33 50 170 65.67 170 85L170 350L125 350C105.67 350 90 334.33 90 315L90 50L135 50Z"
+        fill="var(--logo-color-1)"
+      />
+      <path
+        d="M310 315C310 334.33 294.33 350 275 350L90 350L90 305C90 285.67 105.67 270 125 270L310 270L310 315Z"
+        fill="var(--logo-color-3)"
+      />
+      <path
+        d="M250 315C250 334.33 234.33 350 215 350L90 350L90 305C90 285.67 105.67 270 125 270L250 270L250 315Z"
+        fill="var(--logo-color-2)"
+      />
+    </svg>
+  ),
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
