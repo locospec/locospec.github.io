@@ -16,6 +16,8 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
 });
 
+// https://github.com/vercel/next.js/discussions/54433
+
 export const metadata = createMetadata({
   title: {
     template: "%s | locospec",
