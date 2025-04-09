@@ -4,11 +4,12 @@ description: Data visualisation Library.
 index: true
 ---
 
-
 ### Introduction
+
 Welcome to the Locospec/Lens documentation!
 
 ### What is @locospec/lens-react?
+
 `@locospec/lens-react` is a headless and styled data visualization framework for React, designed to help developers build powerful data exploration interfaces with ease. It provides a consistent and extensible structure for rendering, filtering, viewing, and interacting with datasets — all customizable and built to fit into any design system.
 
 Think of it as a lens that lets users focus on the exact slice of data they need — whether that’s through a datatable, a raw data view, filters, or custom-built views.
@@ -23,11 +24,11 @@ The core philosophy behind lens-react is modularity and clarity in data presenta
 - **Configurable views** like tables, cards, and raw data modes
 - **Customizable filtering logic**, from simple toggles to full-blown filter builders
 - **Themable and pluggable architecture** to work seamlessly in any design system
-Typical use-cases include:
-- Admin panels & dashboards
-- Internal tools
-- Data review & auditing tools
-- CMS-like interfaces
+- Typical use-cases include:
+  - Admin panels & dashboards
+  - Internal tools
+  - Data review & auditing tools
+  - CMS-like interfaces
 
 ---
 
@@ -43,18 +44,18 @@ Typical use-cases include:
 ### Quick Preview
 
 ```tsx
-import { LensProvider, DataTable } from '@locospec/lens-react';
+import { LensProvider, DataTable } from "@locospec/lens-react";
 
 function App() {
   return (
     <LensProvider lensConfiguration={lensConfiguration}>
-        <View viewConfiguration={viewConfiguration}>
-            <DataTable  
-                selectedItems={checkedIds}
-                onSelect={handleSelectionChange}
-                variant="vanilla"
-            />
-        </View>    
+      <View viewConfiguration={viewConfiguration}>
+        <DataTable
+          selectedItems={checkedIds}
+          onSelect={handleSelectionChange}
+          variant="vanilla"
+        />
+      </View>
     </LensProvider>
   );
 }
