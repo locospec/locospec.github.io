@@ -80,9 +80,9 @@
   --grid-base-color: rgba(66, 71, 112, 0.09);
   --grid-dots-color: rgba(66, 71, 112, 0.09);
 
-  --logo-color-1: var(--color-slate-400);
-  --logo-color-2: var(--color-slate-500);
-  --logo-color-3: var(--color-slate-600);
+  --logo-color-1: #a4a5a9;
+  --logo-color-2: #212123;
+  --logo-color-3: #616163;
 }
 
 .dark {
@@ -151,9 +151,9 @@
   --grid-base-color: rgba(255, 255, 255, 0.09);
   --grid-dots-color: rgba(255, 255, 255, 0.09);
 
-  --logo-color-1: var(--color-slate-300);
-  --logo-color-2: var(--color-slate-200);
-  --logo-color-3: var(--color-slate-100);
+  --logo-color-1: #949599;
+  --logo-color-2: #f6f6f6;
+  --logo-color-3: #bcbdc1;
 }
 
 @theme inline {

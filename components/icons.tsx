@@ -96,11 +96,11 @@ export const Icons = {
       />
       <path
         d="M310 315C310 334.33 294.33 350 275 350L90 350L90 305C90 285.67 105.67 270 125 270L310 270L310 315Z"
-        fill="var(--logo-color-3)"
+        fill="var(--logo-color-2)"
       />
       <path
         d="M250 315C250 334.33 234.33 350 215 350L90 350L90 305C90 285.67 105.67 270 125 270L250 270L250 315Z"
-        fill="var(--logo-color-2)"
+        fill="var(--logo-color-3)"
       />
     </svg>
   ),

@@ -18,7 +18,7 @@ export const baseOptions: BaseLayoutProps = {
   nav: {
     title: (
       <>
-        <Icons.logo className="w-8 h-8" />
+        <Icons.logo className="w-10 h-10" />
         Locospec
       </>
     ),
