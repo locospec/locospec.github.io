@@ -1,8 +1,8 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 import Link from "fumadocs-core/link";
-import { cn } from "fumadocs-ui/components/api";
 import { buttonVariants } from "fumadocs-ui/components/ui/button";
 import {
   NavigationMenuContent,
