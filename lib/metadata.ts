@@ -3,6 +3,13 @@ import type { Metadata } from "next/types";
 export function createMetadata(override: Metadata): Metadata {
   return {
     ...override,
+    authors: [
+      {
+        name: "locospec",
+        url: "https://locospec.com",
+      },
+    ],
+    creator: "locospec",
     openGraph: {
       title: override.title ?? undefined,
       description: override.description ?? undefined,
@@ -23,6 +30,22 @@ export function createMetadata(override: Metadata): Metadata {
         "application/rss+xml": "/api/rss.xml",
       },
       ...override.alternates,
+    },
+    icons: {
+      shortcut: "/favicon-16x16.png",
+      apple: "/apple-touch-icon.png",
+      icon: [
+        {
+          media: "(prefers-color-scheme: light)",
+          url: "/assets/light-logo.svg",
+          href: "/assets/light-logo.svg",
+        },
+        {
+          media: "(prefers-color-scheme: dark)",
+          url: "/assets/dark-logo.svg",
+          href: "/assets/dark-logo.svg",
+        },
+      ],
     },
   };
 }
