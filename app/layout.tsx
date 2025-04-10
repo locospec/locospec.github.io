@@ -36,8 +36,10 @@ export default function Layout({ children }: { children: ReactNode }) {
     >
       <head>
         <meta name="apple-mobile-web-app-title" content="Locospec" />
-        <link rel="shortcut icon" href="/icon0.svg" />
-        <link rel="apple-touch-icon" href="/icon0.svg" />
+        <link rel="shortcut icon" href="/icon.svg" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
+        <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+        <link rel="icon" type="image/png" href="/icon.png" />
         <script
           crossOrigin="anonymous"
           src="//cdn.jsdelivr.net/npm/meta-scan@0.11.2/dist/auto.global.js"
