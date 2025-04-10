@@ -35,10 +35,13 @@ export default function Layout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <head>
+        <meta name="apple-mobile-web-app-title" content="Locospec" />
+        <link rel="shortcut icon" href="/icon0.svg" />
+        <link rel="apple-touch-icon" href="/icon0.svg" />
         <script
           crossOrigin="anonymous"
           src="//cdn.jsdelivr.net/npm/meta-scan@0.11.2/dist/auto.global.js"
-          data-auto-enable={"true"}
+          data-auto-enable={"false"}
         />
       </head>
       <body

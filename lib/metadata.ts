@@ -32,8 +32,6 @@ export function createMetadata(override: Metadata): Metadata {
       ...override.alternates,
     },
     icons: {
-      shortcut: "/favicon-16x16.png",
-      apple: "/apple-touch-icon.png",
       icon: [
         {
           media: "(prefers-color-scheme: light)",
