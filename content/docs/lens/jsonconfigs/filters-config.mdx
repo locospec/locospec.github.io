@@ -1,0 +1,169 @@
+---
+title: Simple Filters JSON configuration
+description: Define filters for your Lens Datatable using a simple JSON structure.
+index: true
+---
+
+# 🔍 Simple Filters JSON Configuration
+
+`lensSimpleFilters` provides a declarative way to define filter controls in a Lens-based Datatable. Filters can be based on predefined values (`enum`) or a date range (`date`), and can either be static or dynamically fetched from a related model.
+
+---
+
+## 💡 How it Works
+
+Each filter field is configured by specifying a key, type, label, and additional optional behavior like options, model, or dependencies. These filters appear above the datatable and help narrow down results.
+
+### ✅ Example Configuration
+
+```ts
+lensSimpleFilters: {
+  "state.name": {
+    type: "enum",
+    label: "States",
+    model: "state"
+  },
+  "district.name": {
+    type: "enum",
+    label: "District",
+    model: "district",
+    dependsOn: ["state.name"]
+  },
+  "city.name": {
+    type: "enum",
+    label: "City",
+    model: "city",
+    dependsOn: ["district.name"]
+  },
+  "locality.name": {
+    type: "enum",
+    label: "Locality",
+    model: "locality",
+    dependsOn: ["city.name"]
+  },
+  "category": {
+    type: "enum",
+    label: "Category",
+    options: [
+      { title: "One", const: "One" },
+      { title: "Two", const: "Two" },
+      { title: "Three", const: "Three" }
+    ]
+  }
+}
+```
+
+---
+
+## 🧩 Field Reference
+
+### `type` (required)
+
+- Defines the filter type.
+- Currently supported: `"enum"` and `"date"`
+
+```ts
+type: "enum" // Dropdown
+type: "date" // Date picker
+```
+
+---
+
+### `label` (required)
+
+- Human-readable name for the filter shown in the UI.
+
+```ts
+label: "District"
+```
+
+---
+
+### `model` (optional)
+
+- Used when values need to be fetched dynamically.
+- The model will be used to make an API call to `_read_relation_options` endpoint.
+- The field becomes searchable and paginated.
+
+```ts
+model: "district"
+```
+
+---
+
+### `options` (optional)
+
+- Used when the values are static and can be provided directly.
+- Each option should have:
+  - `title`: label shown to the user
+  - `const`: the value used in filtering logic
+
+```ts
+options: [
+  { title: "One", const: "One" },
+  { title: "Two", const: "Two" }
+]
+```
+
+You can use either `model` or `options`, not both.
+
+---
+
+### `dependsOn` (optional)
+
+- Defines dependencies between filters.
+- If a parent filter changes, it will reset and refetch the dependent dropdown.
+
+```ts
+dependsOn: ["state.name"]
+```
+
+This is especially useful in hierarchical relationships (State → District → City → Locality).
+
+---
+
+## 🔄 Filter Chain Example
+
+Here’s how cascading filters work in practice:
+
+1. **State** is selected.
+2. **District** filter repopulates based on selected state.
+3. **City** options load based on selected district.
+4. **Locality** fetches based on selected city.
+
+This creates a seamless multi-level filter experience.
+
+---
+
+## 📌 Notes
+
+- Filters will only show up if added under `lensSimpleFilters`.
+- Field keys like `"state.name"` or `"city.name"` can target nested properties via dot notation.
+- When `model` is used, the component automatically fetches the options via API.
+
+---
+
+## 🧪 Example with Date Filter
+
+```ts
+"created_at": {
+  type: "date",
+  label: "Created Date"
+}
+```
+
+This adds a simple date range picker that filters based on the `created_at` field.
+
+---
+
+## 📝 Summary Table
+
+| Field       | Type      | Description                                                                   |
+|-------------|-----------|-------------------------------------------------------------------------------|
+| `type`      | string    | `enum` or `date`                                                              |
+| `label`     | string    | User-friendly label                                                           |
+| `model`     | string    | Model name for dynamic dropdown options                                       |
+| `options`   | array     | Array of `{ title, const }` objects for static enums                         |
+| `dependsOn` | string[]  | Parent filters that trigger refresh of this filter when changed               |
+
+---

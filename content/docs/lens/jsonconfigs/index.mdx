@@ -1,0 +1,44 @@
+---
+title: JSON Configurations
+description: Docs on Required JSON configuration.
+index: true
+---
+
+# 📘 JSON Configuration Index
+
+Lens is built to be highly dynamic and customizable through JSON-based configurations. Each view, action, filter, and table can be controlled using structured config objects. Below is a categorized index of available config types and their purposes.
+
+---
+
+## 🗂 Available Configurations
+
+### 📋 Table Config
+Configure how data is displayed inside the datatable.
+- Define columns, visibility, ordering, and dynamic rendering.
+- Supports nested access, custom components, and sorting.
+
+---
+
+### 🎯 Actions Config
+Define context-based actions (e.g., edit, delete, bulk).
+- Control visibility and permissions.
+- Attach dialogs, drawers, or custom components.
+
+---
+
+### 🔍 Simple Filters Config
+Render cascading and user-friendly filters with dependencies.
+- Auto-fetch enum options based on `model`.
+- Define field hierarchy using `dependsOn`.
+
+### Navigations Cards
+
+<Cards>
+  <Card title="Table Config" href="/docs/lens/jsonconfigs/table-config" />
+  <Card title="Actions Config" href="/docs/lens/jsonconfigs/actions-config" />
+  <Card title="Filters Config" href="/docs/lens/jsonconfigs/filters-config" />
+</Cards>
+
+---
+
+> 🔧 These JSON objects live inside your view configuration and power almost everything in Lens. They are meant to be developer-friendly, dynamic, and extendable.
