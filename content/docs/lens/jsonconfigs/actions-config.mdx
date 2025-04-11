@@ -1,0 +1,219 @@
+---
+title: Actions JSON configuration
+description: How to structure JSON for actions column in Datatable.
+index: true
+---
+
+# 🧩 Actions JSON Configuration
+
+Actions in Lens tables allow users to perform context-specific operations like viewing, editing, or deleting a row. The `actions` configuration is a JSON object that defines a list of available actions, each rendered as a button, icon, or dropdown menu within the table's actions column.
+
+These actions are passed as a property to the table view JSON under the key `actions`.
+
+---
+
+## ✍️ Structure Overview
+
+The JSON structure of actions looks like this:
+
+```ts
+const ACTION_2 = {
+  items: [
+    {
+      key: "edit",
+      label: "Edit",
+      url: "/update_asset_type?primary_key=:id",
+      icon: "SquarePen",
+      options: [
+        {
+          key: "update_asset_type",
+          label: "Update Asset Type",
+          url: "/update_asset_type?primary_key=:id&state=:state",
+        },
+        {
+          key: "update_sub_asset_type",
+          label: "Update Sub Asset Type",
+          url: "/update_sub_asset_type?primary_key=:city.locality.id",
+        },
+      ],
+    },
+    {
+      key: "view",
+      label: "View",
+      url: "/view/:id",
+      icon: "EyeIcon",
+    },
+    {
+      key: "delete",
+      label: "Delete",
+      url: "/delete_asset_type?primary_key=:id",
+      icon: "Trash2",
+      confirmation: "true",
+      method: "POST",
+      options: [
+        {
+          key: "delete_asset_type",
+          label: "Delete Asset Type",
+          url: "/delete_asset_type?primary_key=:id",
+        },
+        {
+          key: "delete_sub_asset_type",
+          label: "Delete Sub Asset Type",
+          url: "/delete_sub_asset_type?primary_key=:city.locality.pin",
+        },
+      ],
+    },
+  ]
+}
+```
+
+---
+
+## ⚙️ Configuration Details
+
+### `items: ActionItem[]`
+
+An array of individual action definitions. Each item describes one CTA in the table.
+
+---
+
+### 🔑 `key` (required)
+
+A unique identifier for the action. Used internally.
+
+```json
+"key": "edit"
+```
+
+---
+
+### 🏷️ `label` (optional)
+
+The display name of the action button or option in the dropdown.
+
+```json
+"label": "Edit"
+```
+
+---
+
+### 🔗 `url` (optional but usually required)
+
+Defines the endpoint or route to call when the action is triggered.
+
+- You can use dynamic placeholders such as `:id`, `:state`, or nested ones like `:city.locality.id`.
+- These will be auto-replaced based on the row data.
+
+```json
+"url": "/update_asset_type?primary_key=:id"
+```
+
+---
+
+### 🖼️ `icon` (optional)
+
+Name of the icon to render with the action.
+
+Only three icons are officially supported out of the box:
+
+- `"SquarePen"`
+- `"EyeIcon"`
+- `"Trash2"`
+
+> Frontends may override these with custom icon sets if needed.
+
+```json
+"icon": "SquarePen"
+```
+
+---
+
+### 📑 `options` (optional)
+
+An array of sub-actions shown in a dropdown when this action is clicked. Useful for related operations under a single action button.
+
+```json
+"options": [
+  {
+    "key": "update_asset_type",
+    "label": "Update Asset Type",
+    "url": "/update_asset_type?primary_key=:id"
+  },
+  {
+    "key": "update_sub_asset_type",
+    "label": "Update Sub Asset Type",
+    "url": "/update_sub_asset_type?primary_key=:city.locality.id"
+  }
+]
+```
+
+---
+
+### ⚠️ `confirmation` (optional)
+
+When set to `"true"`, the action will prompt the user for confirmation before proceeding. Ideal for destructive actions like delete.
+
+```json
+"confirmation": "true"
+```
+
+---
+
+### 📬 `method` (optional)
+
+Defines how the action should be triggered.
+
+- `"HREF"` (default) → Navigates the user using React router
+- `"POST"`, `"GET"`, etc. → Sends an HTTP request to the specified URL with method and row data
+
+```json
+"method": "POST"
+```
+
+If `method` is omitted, the default is treated as `"HREF"`.
+
+---
+
+## ✅ Example Use in a View
+
+To include actions in your view configuration:
+
+```json
+{
+    ....
+    "actions" : {
+      "name": "sub_asset_type_default_view",
+      "label": "Sub Asset Types Default View",
+      "type": "view",
+      "model": "sub_asset_type",
+      "attributes": { ... },
+      "selectionType": "multiple",
+      "selectionKey": "id",
+    }
+    ....
+}
+```
+
+---
+
+## 🧩 Summary Table
+
+| Field        | Type     | Description                                                                 |
+|--------------|----------|-----------------------------------------------------------------------------|
+| `key`        | string   | Unique identifier                                                           |
+| `label`      | string   | Display label for button or dropdown option                                 |
+| `url`        | string   | Target route or endpoint (with dynamic `:key` support)                      |
+| `icon`       | string   | One of `"SquarePen"`, `"EyeIcon"`, `"Trash2"`                               |
+| `options`    | array    | Optional sub-actions shown in a popup                                       |
+| `confirmation` | string | If `"true"`, prompts before proceeding (used for destructive actions)       |
+| `method`     | string   | Either `"HREF"` for routing, or HTTP verbs like `"POST"`/`"GET"` for fetch  |
+
+---
+
+## 📌 Notes
+
+- You can add custom actions to extend system behavior without changing the frontend logic.
+- Nested properties like `:city.locality.id` are supported via dot notation for deep data access.
+- Omitting required fields like `key` or `url` may result in runtime errors or non-functional actions.
+
+---

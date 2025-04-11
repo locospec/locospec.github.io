@@ -1,0 +1,249 @@
+---
+title: Table JSON configuration
+description: How to structure JSON to display Table.
+index: true
+---
+
+# 📄 Table & View JSON Configuration
+
+Lens tables and data views are defined using a flexible JSON structure that controls how data is fetched, displayed, filtered, and interacted with. This document explains how to structure these JSON configurations to build consistent, dynamic views across the system.
+
+---
+
+## 🧠 What is a View Configuration?
+
+A *View* is a structured representation of tabular data from a backend model. It determines:
+
+- **What** data to show (via the model and attributes)
+- **How** to display it (via labels, types, filters)
+- **Whether** rows are selectable (via selectionType)
+- **What** scopes are allowed during data queries
+
+Each view is declarative — meaning no extra frontend logic is required to render the table.
+
+---
+
+## 🧱 Structure Overview
+
+Each table view follows this shape:
+
+```json
+{
+  "name": "example_view",
+  "label": "Example Table View",
+  "type": "view",
+  "model": "example_model",
+  "attributes": { ... },
+  "selectionType": "multiple",
+  "selectionKey": "id",
+  "allowedScopes": ["default", "tenant", "admin"],
+  "lensSimpleFilters": { ... },
+  "actions": [ ... ]
+}
+```
+
+---
+
+## 🔑 Basic Fields
+
+### `name`
+The internal name of the view. This is used to register or render the view programmatically.
+
+```json
+"name": "sub_asset_type_default_view"
+```
+
+### `label`
+The title displayed on the frontend UI for this table.
+
+```json
+"label": "Sub Asset Types Default View"
+```
+
+### `type`
+This must always be set to `"view"`.
+
+```json
+"type": "view"
+```
+
+---
+
+## 🗃️ Backend Model Mapping
+
+### `model`
+
+Defines the backend entity that this view is built on. This string should match the model name used in backend queries.
+
+```json
+"model": "sub_asset_type"
+```
+
+This tells the system to query data from the `sub_asset_type` model when rendering the view.
+
+---
+
+## ✅ Row Selection
+
+### `selectionType`
+
+Determines if and how users can select rows.
+
+Options:
+- `"none"` – No selection allowed (default)
+- `"single"` – Only one row can be selected at a time
+- `"multiple"` – Multiple rows can be selected (e.g., for bulk actions)
+
+```json
+"selectionType": "multiple"
+```
+
+### `selectionKey`
+
+Specifies the unique field used to identify each record. This is required if selection is enabled.
+
+```json
+"selectionKey": "id"
+```
+
+---
+
+## 📊 Attributes (Columns)
+
+The `attributes` block defines which fields appear as columns in the table.
+
+Each key is a field from the model, and the value includes metadata like label and type.
+
+```json
+"attributes": {
+  "id": {
+    "type": "string",
+    "label": "Sr. No."
+  },
+  "state": {
+    "type": "string",
+    "label": "State"
+  },
+  "district": {
+    "type": "string",
+    "label": "District"
+  },
+  "cities": {
+    "type": "string",
+    "label": "Cities"
+  }
+}
+```
+
+This setup will show a 4-column table, rendering string values for each field.
+
+---
+
+## 🛡️ Access Control
+
+### `allowedScopes`
+
+An optional array that restricts what scopes (contexts) can be used when querying data with the `_read` API. This adds a layer of security and data isolation.
+
+```json
+"allowedScopes": ["this", "is", "a", "sample", "scope"]
+```
+
+This means the view will only respond to read requests that specify one of the above scopes.
+
+---
+
+## 🔍 Filters (Optional)
+
+### `lensSimpleFilters`
+
+This block defines UI-level filters that users can apply. Each key maps to a filterable field.
+
+If this object is left empty or omitted, the table will not show filter options.
+
+```json
+"lensSimpleFilters": {
+  "state": {
+    "type": "enum",
+    "label": "Filter by State",
+    "options": ["Karnataka", "Maharashtra", "Delhi"]
+  }
+}
+```
+
+To omit filters altogether:
+
+```json
+"lensSimpleFilters": {}
+```
+
+Or simply remove the key from the config.
+
+---
+
+## ⚙️ Actions (Optional)
+
+Tables can include actions such as buttons (e.g., “Delete”, “Export”) or dropdowns in row menus.
+
+These are defined under an `actions` key, structured as an array. If no actions are needed, the key can be left out.
+
+```json
+"actions": {
+  "items": [
+    {
+      "key": "view",
+      "label": "View",
+      "url": "/view/:id",
+      "icon": "EyeIcon",
+    },
+    {
+      "key": "edit",
+      "label": "Edit",
+      "url": "/edit/:id",
+      "icon": "EditIcon",
+    } 
+  ]
+}
+```
+
+If omitted, the table renders as read-only. For more details visit [Actions Configuration](/docs/lens/jsonconfigs/actions-config).
+
+---
+
+## ✅ Example View Config Summary
+
+```json
+{
+  "name": "sub_asset_type_default_view",
+  "label": "Sub Asset Types Default View",
+  "type": "view",
+  "model": "sub_asset_type",
+  "selectionType": "multiple",
+  "selectionKey": "id",
+  "attributes": {
+    "id": { "type": "string", "label": "Sr. No." },
+    "state": { "type": "string", "label": "State" },
+    "district": { "type": "string", "label": "District" },
+    "cities": { "type": "string", "label": "Cities" }
+  },
+  "lensSimpleFilters": {},
+  "allowedScopes": ["this", "is", "a", "sample", "scope"]
+}
+```
+
+---
+
+## 🧩 Summary Table
+
+| Field               | Description                                                             |
+|--------------------|-------------------------------------------------------------------------|
+| `name`              | Internal name of the view                                               |
+| `label`             | UI label shown as heading                                               |
+| `type`              | Always `"view"`                                                         |
+| `model`             | Backend model name to query                                             |
+| `selectionType`     | Enables row selection (`none`, `single`, `multiple`)                    |
+| `selectionKey`      | Field used as unique identifier for selected rows                       |
+| `attributes`        | Maps data fields to table columns                                       |
+| `allowedScopes`     | Restricts API `_read` requests to valid scopes                          |
+| `lensSimpleFilters` | Optional filters (can be omitted or empty)                              |
+| `actions`           | Optional actions (e.g., bulk buttons, row menus; can be omitted)        |
