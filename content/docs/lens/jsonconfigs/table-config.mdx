@@ -38,9 +38,55 @@ Each table view follows this shape:
   "selectionKey": "id",
   "allowedScopes": ["default", "tenant", "admin"],
   "lensSimpleFilters": { ... },
-  "actions": [ ... ]
+  "actions": [ ... ],
+  "serialize": true
 }
 ```
+
+### Serialize (Row Index Column)
+
+To automatically add a serial/index column to the datatable, use the `serialize` key in the view configuration.
+
+This column generates sequential numbers for each row (starting from 1) purely on the frontend. It is useful for visually tracking or identifying rows without relying on any field in the dataset.
+
+#### Usage
+
+To enable it with default behavior:
+
+```json
+{
+  "serialize": true
+}
+```
+
+To customize the appearance or layout, pass an object:
+
+```json
+{
+  "serialize": {
+    "header": "Sr. No.",
+    "align": "center",
+    "fixed": "left",
+    "minWidth": 60,
+    "maxWidth": 80
+  }
+}
+```
+
+#### Supported Options
+
+These options follow the `SerializeInterface` definition:
+
+| Key         | Type                       | Description                                                  |
+|-------------|----------------------------|--------------------------------------------------------------|
+| `header`    | `string`                   | Column header text (e.g., "Sr. No.", "#", etc.)              |
+| `align`     | `"start"`, `"center"`, `"end"` | Horizontal alignment of content within the column         |
+| `fixed`     | `false`, `"left"`, `"right"` | Fix the column to left or right, or keep it scrollable       |
+| `width`     | `number`                   | Set fixed column width in pixels                             |
+| `minWidth`  | `number`                   | Minimum column width                                          |
+| `maxWidth`  | `number`                   | Maximum column width                                          |
+
+If the `serialize` key is omitted or set to `false`, no index column will be rendered.
 
 ---
 
