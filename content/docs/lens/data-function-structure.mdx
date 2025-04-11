@@ -1,0 +1,167 @@
+---
+title: Populating data for Lens Datatable
+description: How to structure an API or mock function to respond to `_read` requests and return data for the Lens table.
+index: true
+---
+
+## 📡 Writing an API for Lens DataTable
+
+To enable the Lens DataTable to fetch and render data correctly, you need to implement a `_read` API endpoint for your data resource. Below are the required guidelines and response structure.
+
+---
+
+### ✅ Endpoint Format
+
+The API should respond to a POST request at the following pattern:
+
+```http
+POST /:endpoint/_read
+```
+
+- `:endpoint`: is the endpoint defined in the Lens Provider Configuration.
+
+---
+
+### 📥 Request Body
+
+The request body is a JSON object structured like this:
+
+```json
+{
+  "search": "searchTerm",             // Text to be used in free text search
+  "pagination": {                       // Used for paginated fetching
+    "type": "cursor",
+     "per_page": 10, 
+     "cursor": 10                      
+  },  
+  "filters": {
+  "op": "and",
+  "conditions": [
+    {
+      "attribute": "locality.name",
+      "op": "is_any_of",
+      "value": ["locality_1", "locality_5", "locality_3"]
+    },
+    ......
+  ]
+}
+}
+```
+
+---
+
+### 🔍 Filters Structure
+
+The `filters` key follows a structured object format to support complex, nested filter conditions using logical operators. This enables powerful server-side filtering.
+
+Here’s the format:
+
+```json
+{
+  "op": "and",
+  "conditions": [
+    {
+      "attribute": "locality.name",
+      "op": "is_any_of",
+      "value": ["locality_1", "locality_5", "locality_3"]
+    }
+  ]
+}
+```
+
+#### Keys:
+
+- `op`: Logical operator. Can be `and`, `or`, or `not`.
+- `conditions`: An array of filter conditions.
+  - `attribute`: The name of the attribute to filter (must match view config keys).
+  - `op`: Comparison operator. Examples include:
+    - `is`: Equals
+    - `is_not`: Not equals
+    - `is_any_of`: Attribute matches any in list
+    - `contains`, `starts_with`, `ends_with`
+    - `greater_than`, `less_than`, etc.
+  - `value`: The value or array of values used for filtering.
+
+You can nest conditions by including another filter object inside `conditions`.
+
+```json
+{
+  "op": "or",
+  "conditions": [
+    {
+      "op": "and",
+      "conditions": [
+        { "attribute": "state", "op": "is", "value": "Delhi" },
+        { "attribute": "district", "op": "is", "value": "North" }
+      ]
+    },
+    {
+      "attribute": "city", "op": "contains", "value": "Nagar"
+    }
+  ]
+}
+```
+
+This allows filters to be as expressive as needed while staying consistent.
+
+---
+
+### 📤 Response Structure
+
+The response must return data in the following format:
+
+```json
+{
+  "success": true,
+  "data": [ /* array of row objects */ ],
+  "meta": {
+    "count": 2,
+    "per_page": 10,
+    "has_more": true,
+    "next_cursor": 10,
+    "prev_cursor": null
+  }
+}
+```
+
+- `data`: Array of row entries.
+- `meta`: Controls pagination and is required by the table.
+- `next_cursor`: The next starting index for paginated fetch.
+- `count`: Total number of records (optional but useful for UX).
+
+---
+
+### ⚙️ Row Structure
+
+Each object in `data` should contain fields matching the attribute keys in the table configuration, including nested keys if applicable:
+
+```json
+{
+  "id": "uuid_1",
+  "state": "State 1",
+  "district": "District 1",
+  "cities": "City 1",
+  "properties": "Property 1",
+  "city": {
+    "id": "city_1",
+    "name": "City 1",
+    "locality": {
+      "id": "locality_1",
+      "name": "Locality 1",
+      "pin": "Pin 1"
+    }
+  }
+}
+```
+
+Ensure keys like `city.locality.id` are resolvable from the nested object. This structure supports selection keys and complex URL bindings in actions.
+
+---
+
+### 💡 Tips
+
+- **Pagination**: Always respect the `cursor` and return `next_cursor` to support infinite scroll or load-more.
+- **Filtering**: Use the `filters` object to dynamically filter data based on selected filter values.
+- **Search**: Use the `search` string to match against relevant columns in the dataset.
+
+---
