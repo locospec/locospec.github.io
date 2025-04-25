@@ -11,8 +11,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@source '../node_modules/fumadocs-ui/dist/**/*.js';
-
 :root {
   --radius: 0.625rem;
 
