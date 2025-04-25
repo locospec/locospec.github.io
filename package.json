@@ -16,6 +16,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@locospec/lens-react": "^0.0.17",
     "@locospec/responsive-preview-react": "^0.1.0",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-navigation-menu": "^1.2.5",
@@ -30,6 +31,7 @@
     "fumadocs-twoslash": "^3.1.0",
     "fumadocs-ui": "15.2.6",
     "glsl-canvas-js": "^0.2.9",
+    "install": "^0.13.0",
     "lucide-react": "^0.487.0",
     "motion": "^12.6.3",
     "next": "15.3.0",

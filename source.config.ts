@@ -56,14 +56,28 @@ export default defineConfig({
   lastModifiedTime: "git",
   mdxOptions: {
     rehypeCodeOptions: {
+      lazy: true,
+      experimentalJSEngine: true,
       inline: "tailing-curly-colon",
+      langs: ["ts", "js", "html", "tsx", "mdx"],
       themes: {
         light: "catppuccin-latte",
         dark: "catppuccin-mocha",
       },
       transformers: [
         ...(rehypeCodeDefaultOptions.transformers ?? []),
-        transformerTwoslash(),
+        transformerTwoslash({
+          twoslashOptions: {
+            compilerOptions: {
+              paths: {
+                "@locospec/lens-react": [
+                  "node_modules/@locospec/lens-react/dist/main.d.ts",
+                  "node_modules/@locospec/lens-react/dist/components/LensProvider/types.d.ts",
+                ],
+              },
+            },
+          },
+        }),
         transformerRemoveNotationEscape(),
       ],
     },

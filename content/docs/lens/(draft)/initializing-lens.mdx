@@ -14,10 +14,25 @@ Irrespective of the presentation of the data in whichever style of the view, abo
 
 You would be providing both information using the top level wrapper called `LensProvider`
 
-```tsx
-<LensProvider>
+```ts twoslash
+console.log("Hello World");
+```
 
-<LensProvider>
+```tsx twoslash title="index.tsx"
+import React from "react";
+import { LensProvider } from "@locospec/lens-react";
+
+export default function Lens() {
+  return (
+    <LensProvider
+      lensConfiguration={{
+        endpoint: "/api/data-bench/auction-data-3",
+      }}
+    >
+      <div></div>
+    </LensProvider>
+  );
+}
 ```
 
 LensProvider will take care of:
