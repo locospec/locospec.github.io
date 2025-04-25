@@ -1,0 +1,39 @@
+---
+title: Initializing Lens
+description: Initializing Lens.
+---
+
+Lens operates on data, when we say data, think of it like collection of datum, it's plural.
+
+When we give data to Lens the basic minimum it needs to know:
+
+- Structure of the data (attributes and their types)
+- The data itself (You would be supplying the data via an endpoint)
+
+Irrespective of the presentation of the data in whichever style of the view, above both stay same.
+
+You would be providing both information using the top level wrapper called `LensProvider`
+
+```tsx
+<LensProvider>
+
+<LensProvider>
+```
+
+LensProvider will take care of:
+
+- Querying the data using Tanstack Query
+- Supplying data attributes to Views (Each View is responsible to transform, interpret the config)
+
+If "Restaurants" is the data you are going to show, you need to supply with structure which might be:
+
+```
+{
+    "attributes": {
+         "name": {
+             "type": "string"
+          }
+     }
+}
+
+```

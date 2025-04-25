@@ -16,7 +16,7 @@ import { rehypeCodeDefaultOptions } from "fumadocs-core/mdx-plugins";
 export const docs = defineDocs({
   docs: {
     schema: frontmatterSchema.extend({
-      index: z.boolean().default(false),
+      index: z.boolean().optional().default(false),
     }),
   },
   meta: {
@@ -63,9 +63,7 @@ export default defineConfig({
       },
       transformers: [
         ...(rehypeCodeDefaultOptions.transformers ?? []),
-        // transformerTwoslash({
-        //   typesCache: createFileSystemTypesCache(),
-        // }),
+        transformerTwoslash(),
         transformerRemoveNotationEscape(),
       ],
     },

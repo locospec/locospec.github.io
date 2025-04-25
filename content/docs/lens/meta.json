@@ -1,5 +1,15 @@
 {
   "title": "Lens",
   "description": "The React component for Data Views",
-  "root": true
+  "root": true,
+  "pages": [
+    "---Introduction---",
+    "index",
+    "installation",
+    "(datatable)",
+    "(jsonconfigs)",
+    "---Draft---",
+    "./(draft)/features",
+    "./(draft)/initializing-lens"
+  ]
 }
