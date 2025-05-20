@@ -1,0 +1,110 @@
+---
+title: Glossary
+description: Key terms and concepts used throughout the Locospec framework.
+---
+
+# 📚 Glossary
+
+A reference list of key concepts and terms used across the Locospec ecosystem.
+
+---
+
+## 🔖 Spec
+
+A **Spec** is a JSON definition that describes the structure and behavior of data, views, or actions in Locospec. Specs are used to generate APIs, forms, filters, tables, and more.
+
+---
+
+## 🗃 Model Spec
+
+Defines the structure of a database entity. It includes attributes (fields), relationships, scopes, aliases, and optional config for soft deletes, primary keys, etc.
+
+---
+
+## 📊 View Spec
+
+Describes how a collection of records should be displayed and queried. Includes filters, pagination, sorts, and table/list/kanban-style views.
+
+---
+
+## 📇 Entity Spec
+
+Defines how a **single record** should be displayed using a sectioned layout. Typically used for detail pages, profile views, or cards.
+
+---
+
+## ⚙️ Mutator Spec
+
+A declarative form specification for **creating, updating, or deleting** a record. Includes generators, validations, layout schema, and UI schema.
+
+---
+
+## 🔁 Action Spec
+
+A low-level DB operation spec like `insert`, `update`, `delete`, or `select`. Typically used internally by mutators and views.
+
+---
+
+## 🧱 Attributes
+
+Define the fields of a model or mutator. Includes type, label, generation rules, and validations. Can also be used to configure file inputs, JSON fields, and relationships.
+
+---
+
+## 🔍 Filters
+
+Declarative logic for querying data. Can be simple (`{ key: value }`) or deeply nested with logical groups (`and`, `or`) and multiple operators like `is`, `contains`, etc.
+
+---
+
+## 🧠 Scopes
+
+Reusable named filters defined at the model level. These can be referenced in views, mutators, or queries.
+
+---
+
+## 🪄 Aliases
+
+Virtual fields that derive their value from other fields or relationships using `source` or `transform`. Helpful for exposing related values or computed fields.
+
+---
+
+## 🔐 Permissions
+
+Access control at the spec level. If a user has access to a spec (model, view, entity, mutator), they can use it. Permissions are declared inline via `"permissions": ["read", "update"]`.
+
+---
+
+## 🗂 Registry
+
+The runtime system that loads, validates, and caches specs. There is a PHP registry and a TS registry, both capable of validating against schema standards.
+
+---
+
+## 🔄 State Machine
+
+Used in advanced mutators or generators, the state machine enables conditional logic and data flow orchestration, similar to AWS Step Functions.
+
+---
+
+## 🧩 JSON Schema
+
+The formal structure used to validate specs. Locospec follows [JSON Schema Draft 07](https://json-schema.org) to enforce structure and type safety.
+
+---
+
+## 🚀 Rocket
+
+A project scaffolding CLI/tool that connects to your database, reads structure, and auto-generates Locospec-compatible specs (model, view, entity, etc.).
+
+---
+
+## 🪪 Expand
+
+A way to declare which **relationships** should be resolved and included when querying data. Used in Views, Entities, and Select Actions.
+
+---
+
+## 🖼 Display Modes
+
+Used in view specs to determine how data should be rendered — e.g., `table`, `list`, `kanban`, or `single`.

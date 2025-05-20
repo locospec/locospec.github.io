@@ -1,0 +1,112 @@
+---
+title: Entity Schema
+description: Define how a single record should be displayed using layout sections and nested fields.
+---
+
+The **Entity Schema** defines how a **single record** of a model should be presented—think detail pages, summary cards, or read-only views. It focuses entirely on layout: grouping, nesting, and arranging fields into readable sections.
+
+Unlike Views, which render collections, **Entity Specs render one record at a time**.
+
+---
+
+## 🧩 Basic Structure
+
+```json
+{
+    "name": "user_detail",
+    "type": "entity",
+    "label": "User Detail",
+    "model": "user",
+    "expand": ["role"],
+    "layout": [
+        [
+            "$ User Info"
+            ["$Basic Info", "name", "email"],
+            ["$Contact Info", "phone", "address"],
+            ["$Company Info", "company.name", "company.website"]
+        ]
+    ]
+}
+```
+
+---
+
+## ⚙️ Required Fields
+
+| Field    | Type       | Description                                |
+| -------- | ---------- | ------------------------------------------ |
+| `name`   | string     | Unique name of the entity spec             |
+| `type`   | `"entity"` | Must always be `"entity"`                  |
+| `label`  | string     | Human-readable name for UI                 |
+| `model`  | string     | Name of the associated model spec          |
+| `layout` | array      | Layout definition for rendering the fields |
+
+---
+
+## 🔄 `expand`
+
+Declare which **related models** to load when rendering this entity.
+
+```json
+"expand": ["role", "profile.city"]
+```
+
+- Enables fields like `role.name` or `profile.city.name` to be accessible and displayed
+- Must match relationships defined in the model spec
+
+---
+
+## 🧱 `layout`
+
+The `layout` field defines how to visually arrange fields when displaying a **single record**. It supports:
+
+- Sections (`$Header`)
+- Grouped fields (rows)
+- Column-based layouts
+- Nested relationships (e.g., `company.name`)
+
+Each item in the layout array can be:
+
+- A **section header** (starts with `$`)
+- A **row of fields** (array)
+- A **nested array of rows and sections** for full control
+
+### Example:
+
+```json
+"layout": [
+    [
+        "$ User Info"
+        ["$Basic Info", "name", "email"],
+        ["$Contact Info", "phone", "address"],
+        ["$Company Info", "company.name", "company.website"]
+    ]
+]
+```
+
+This defines:
+
+- A single row section titled **User Info**
+- Three **columns** inside that row:
+
+  - Column 1: labeled **Basic Info** → shows `name`, `email`
+  - Column 2: labeled **Contact Info** → shows `phone`, `address`
+  - Column 3: labeled **Company Info** → shows `company.name`, `company.website`
+
+- Support for **nested relationships** via dot notation
+
+> 🧠 Layout is intentionally renderer-agnostic—it works whether you're rendering in cards, tabs, rows, or columns.
+
+---
+
+## 🧪 Example Entity Spec
+
+```json
+
+```
+
+---
+
+## 📎 JSON Schema Reference
+
+👉 [`entity.json`](https://locospec.com/schemas/entity.json)

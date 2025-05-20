@@ -1,5 +1,86 @@
 ---
-title: Behind the Scenes
-description: Configure navigation in your Fumadocs app.
+title: Introduction
+description: What Locospec specs are, why we need them, and how they shape the low-code engine.
 index: true
 ---
+
+> “Specs are the new code. Write once, power everything.”
+
+Welcome to **Locospec Standard Specifications**—the foundation of how we build, describe, and extend data-driven systems using nothing but JSON.
+
+Locospec is a **spec-first, low-code framework** designed to make building internal tools, admin panels, and workflows as easy as writing configuration. But not just any config—**typed, validated, reusable JSON specs** that double as documentation and triple as API contracts.
+
+---
+
+## 🔍 What Is a Locospec?
+
+At its core, a **Locospec** is a JSON document that tells the system:
+
+- What data looks like (`model`)
+- How it should be displayed (`view`, `entity`)
+- How it can be mutated (`mutator`, `action`)
+- How users can search, filter, and interact (`filters`, `scopes`)
+- Who can see or do what (`permissions`)
+
+No more stitching logic across backend controllers and frontend UI. With Locospec, the spec is the single source of truth—**one file, many powers**.
+
+---
+
+## 🧠 Why Have a Spec Standard?
+
+In a growing codebase, it’s easy for logic to scatter:
+
+- Backend handles validation, but frontend repeats it
+- DB knows relationships, but UI guesses it
+- Mutations are manual, brittle, and hard to test
+
+**Locospec fixes this with a shared spec schema**—standardized, engine-agnostic, and runtime-neutral. This schema powers everything from:
+
+✅ CRUD APIs  
+✅ Tables & Forms  
+✅ Filter Builders  
+✅ Mutator State Machines  
+✅ Validation Rules  
+✅ Permission Checks  
+✅ Even AI-powered spec tooling
+
+---
+
+## 🧱 What You’ll Learn in This Section
+
+This section is your spec bible. You’ll find the **complete JSON schema** for each spec type and learn how to:
+
+- Declare models and attributes
+- Describe relationships and filters
+- Create reusable lenses and forms
+- Add validations, generators, and layout metadata
+
+No implementation details. Just the **contract** between your mind and the machine.
+
+---
+
+## 🧩 Supported Spec Types
+
+| Spec Type | Purpose                                                                  |
+| --------- | ------------------------------------------------------------------------ |
+| `model`   | Defines data structure, fields, and relationships                        |
+| `view`    | Declares how to query and display collections of data                    |
+| `entity`  | Structures how to show a single record (e.g., detail view, summary card) |
+| `mutator` | Describes form layouts and mutation input                                |
+| `action`  | Direct DB operations like insert/update/delete                           |
+| `filters` | Declarative query logic with nested conditions                           |
+| `scopes`  | Predefined filters for dynamic views (e.g. `only_published`)             |
+
+---
+
+## 🚀 DX-First, Always
+
+- **Write once**: A single spec can power backend APIs, frontend components, and dev tools.
+- **Type-safe**: All specs follow [JSON Schema v7](https://json-schema.org/specification.html), and you can validate them before shipping.
+- **Composable**: Specs reference other specs. Build your system like LEGO bricks.
+- **Future-proof**: Specs can be versioned, synced, and rolled back anytime.
+
+---
+
+Ready to spec your world?  
+Let’s start with the heart of everything: the **Model Schema**.

@@ -1,0 +1,181 @@
+---
+title: Action Schema
+description: Define low-level database operations like insert, update, delete, and select in a consistent format.
+---
+
+**Action Schema** describe direct, low-level database operations—**insert**, **update**, **delete**, and **select**. They are the foundation for any server-side data manipulation and power all backend logic within Locospec.
+
+They are typically used **behind the scenes** by features like Mutators and Views but can also be triggered manually when fine-grained control is needed.
+
+---
+
+## ✨ Supported Actions
+
+| Type     | Purpose                         |
+| -------- | ------------------------------- |
+| `insert` | Create one or more records      |
+| `update` | Modify existing records         |
+| `delete` | Remove (or soft delete) records |
+| `select` | Fetch and filter records        |
+
+---
+
+## 📥 `insert`
+
+Inserts one or more records into a model’s table.
+
+```json
+{
+  "type": "insert",
+  "modelName": "user",
+  "data": [
+    {
+      "uuid": "123",
+      "name": "Rajesh"
+    }
+  ]
+}
+```
+
+### Required Fields
+
+| Field       | Type   | Description                |
+| ----------- | ------ | -------------------------- |
+| `type`      | string | Must be `"insert"`         |
+| `modelName` | string | Target model name          |
+| `data`      | array  | Array of records to insert |
+
+> ℹ️ Supports multiple inserts in one operation.
+
+---
+
+## ✏️ `update`
+
+Updates one or more records matching the given filters.
+
+```json
+{
+  "type": "update",
+  "modelName": "user",
+  "filters": {
+    "op": "and",
+    "conditions": [{ "attribute": "status", "op": "is", "value": "pending" }]
+  },
+  "data": {
+    "status": "approved"
+  }
+}
+```
+
+### Required Fields
+
+| Field       | Type   | Description                 |
+| ----------- | ------ | --------------------------- |
+| `type`      | string | Must be `"update"`          |
+| `modelName` | string | Target model name           |
+| `filters`   | object | Conditions to match records |
+| `data`      | object | Key-value pairs to update   |
+
+---
+
+## 🗑 `delete`
+
+Deletes (or soft-deletes) records based on filters.
+
+```json
+{
+  "type": "delete",
+  "modelName": "user",
+  "softDelete": true,
+  "deleteColumn": "deleted_at",
+  "filters": {
+    "op": "and",
+    "conditions": [{ "attribute": "status", "op": "is", "value": "inactive" }]
+  }
+}
+```
+
+### Required Fields
+
+| Field          | Type    | Description                           |
+| -------------- | ------- | ------------------------------------- |
+| `type`         | string  | Must be `"delete"`                    |
+| `modelName`    | string  | Target model name                     |
+| `filters`      | object  | Conditions to match records           |
+| `softDelete`   | boolean | If true, marks the record as deleted  |
+| `deleteColumn` | string  | Column used for soft delete timestamp |
+
+---
+
+## 📊 `select`
+
+Retrieves data from the database with filters, scopes, sorts, and pagination.
+
+```json
+{
+  "type": "select",
+  "modelName": "user",
+  "attributes": ["uuid", "name", "email"],
+  "filters": {
+    "op": "and",
+    "conditions": [{ "attribute": "status", "op": "is", "value": "active" }]
+  },
+  "sorts": [{ "attribute": "created_at", "order": "desc" }],
+  "pagination": {
+    "type": "cursor",
+    "limit": 10
+  },
+  "expand": ["role"]
+}
+```
+
+### Required Fields
+
+| Field       | Type   | Description             |
+| ----------- | ------ | ----------------------- |
+| `type`      | string | Must be `"select"`      |
+| `modelName` | string | The model to query from |
+
+---
+
+## 🔍 Filter Format
+
+Actions like `select`, `update`, and `delete` support all three filter formats:
+
+1. **Filter Group**
+
+```json
+{
+  "op": "and",
+  "conditions": [{ "attribute": "status", "op": "is", "value": "active" }]
+}
+```
+
+2. **Array of Conditions**
+
+```json
+[{ "attribute": "status", "op": "is", "value": "active" }]
+```
+
+3. **Key-Value Object**
+
+```json
+{
+  "status": "active"
+}
+```
+
+> See the [Filter Schema](/specifications/filter-schema) for full reference.
+
+---
+
+## 📎 JSON Schema References
+
+- 👉 [`insert.json`](https://locospec.com/schemas/database-operations/insert.json)
+- 👉 [`update.json`](https://locospec.com/schemas/database-operations/update.json)
+- 👉 [`delete.json`](https://locospec.com/schemas/database-operations/delete.json)
+- 👉 [`select.json`](https://locospec.com/schemas/database-operations/select.json)
+
+```
+
+```

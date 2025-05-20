@@ -1,0 +1,224 @@
+---
+title: Model Schema
+description: Define your data model using attributes, relationships, and config options.
+---
+
+A **Model Schema** is the foundation of every Locospec application. It defines the structure of your data: fields, types, relationships, and configuration—used to auto-generate queries, filters, forms, and more.
+
+---
+
+## 🧩 Schema Structure
+
+```json
+{
+  "name": "user",
+  "type": "model",
+  "label": "User",
+  "config": {
+    "primaryKey": "id",
+    "labelKey": "name",
+    "connection": "default"
+  },
+  "attributes": { ... },
+  "relationships": { ... },
+  "scopes": { ... },
+  "aliases": { ... },
+  "defaultView": { ... }
+}
+```
+
+---
+
+## 🔑 Required Fields
+
+| Field        | Type      | Description                      |
+| ------------ | --------- | -------------------------------- |
+| `name`       | string    | Unique name (used in URLs, etc.) |
+| `type`       | `"model"` | Type identifier                  |
+| `label`      | string    | Human-friendly label             |
+| `config`     | object    | DB connection & primary key info |
+| `attributes` | object    | Field definitions                |
+
+---
+
+## ⚙️ `config`
+
+Defines how the model connects to your database and behaves at runtime.
+
+```json
+"config": {
+  "primaryKey": "id",
+  "labelKey": "name",
+  "connection": "default",
+  "softDelete": true,
+  "deleteColumn": "deleted_at"
+}
+```
+
+| Key            | Type    | Description                                          |
+| -------------- | ------- | ---------------------------------------------------- |
+| `primaryKey`   | string  | Primary key column (default: `id`)                   |
+| `labelKey`     | string  | Key to display as a label in dropdowns, etc.         |
+| `connection`   | string  | DB connection name                                   |
+| `softDelete`   | boolean | Enable soft delete support                           |
+| `deleteColumn` | string  | Column used for soft deletes (default: `deleted_at`) |
+| `table`        | string  | (optional) override inferred table name              |
+
+---
+
+## 🧱 `attributes`
+
+Defines the fields and data types for this model.
+
+```json
+"attributes": {
+  "uuid": {
+    "type": "uuid",
+    "label": "ID",
+    "generations": [
+      {
+        "type": "uuid",
+        "operations": ["insert"]
+      }
+    ],
+    "validations": [
+      {
+        "type": "required",
+        "operations": ["insert"],
+        "message": "UUID is required"
+      }
+    ]
+  },
+  "name": {
+    "type": "string",
+    "label": "Name"
+  }
+}
+```
+
+Each attribute supports:
+
+- `type`: Data type (e.g., `string`, `uuid`, `timestamp`, `jsonb`, etc.)
+- `label`: Human-readable label
+- `generations`: Rules for automatic value generation (e.g. slug, UUID)
+- `validations`: Field-level validation rules with custom messages
+
+---
+
+## 🔗 `relationships`
+
+Defines links to other models.
+
+```json
+"relationships": {
+  "belongs_to": {
+    "account": {
+      "model": "account",
+      "foreignKey": "account_id",
+      "ownerKey": "id"
+    }
+  },
+  "has_many": {
+    "posts": {
+      "model": "post",
+      "foreignKey": "user_id",
+      "localKey": "id"
+    }
+  }
+}
+```
+
+Supported types:
+
+- `belongs_to`
+- `has_one`
+- `has_many`
+
+Each relationship defines:
+
+- `model`: Related model name
+- `foreignKey`: Foreign key on current or related model
+- `localKey` / `ownerKey`: Column used for joining
+
+---
+
+## 🎯 `scopes`
+
+Reusable filter logic for this model.
+
+```json
+"scopes": {
+  "active_users": {
+    "op": "and",
+    "conditions": [
+      { "attribute": "status", "op": "is", "value": "active" }
+    ]
+  }
+}
+```
+
+Each scope is a **named filter**, used in views and queries to simplify logic.
+
+---
+
+## 🧪 `aliases`
+
+Virtual fields used for referencing nested paths or transforming data using [JMESPath](https://jmespath.org/) expressions.
+
+```json
+"aliases": {
+  "age": {
+    "source": "profile.age"
+  },
+  "full_name": {
+    "transform": "join(' ', [first_name, last_name])"
+  }
+}
+```
+
+| Field       | Description                                                                    |
+| ----------- | ------------------------------------------------------------------------------ |
+| `source`    | Path to another attribute, supports dot notation                               |
+| `transform` | A [JMESPath](https://jmespath.org/) expression used to derive or modify values |
+
+---
+
+## 🖼 `defaultView`
+
+Declare a quick, opinionated default view for this model.
+
+```json
+"defaultView": {
+  "name": "users",
+  "type": "view",
+  "label": "All Users",
+  "attributes": ["uuid", "name", "email"],
+  "lensSimpleFilters": ["status"],
+  "selectionType": "multiple"
+}
+```
+
+Useful when bootstrapping UI tables without writing a full view spec.
+
+---
+
+## ✅ Schema Compliance
+
+Locospec model specs are:
+
+✅ Fully typed  
+✅ Validated by JSON Schema  
+✅ Supports versioning & rollback  
+✅ Runtime-neutral — works in PHP, TypeScript, and more
+
+---
+
+## 🧪 Example Model Spec
+
+```json
+
+```
+
+## 📎 JSON Schema Reference
+
+👉 [`model.json`](https://locospec.com/schemas/model.json)

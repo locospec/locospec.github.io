@@ -1,0 +1,165 @@
+---
+title: Mutator Schema
+description: Define how create, update, and delete operations should behave via declarative specs.
+---
+
+A **Mutator Schema** defines how a record can be **created**, **updated**, or **deleted**. It represents a form-based mutation layer on top of your model—complete with fields, validations, generators, and layout.
+
+---
+
+## 🧩 Basic Structure
+
+```json
+{
+  "name": "create_user",
+  "type": "mutator",
+  "label": "Create User",
+  "dbOp": "insert",
+  "model": "user",
+  "attributes": { ... },
+  "schema": { ... },
+  "uiSchema": { ... }
+}
+```
+
+---
+
+## ⚙️ Required Fields
+
+| Field        | Type        | Description                                  |
+| ------------ | ----------- | -------------------------------------------- |
+| `name`       | string      | Unique identifier for the mutator            |
+| `type`       | `"mutator"` | Must always be `"mutator"`                   |
+| `label`      | string      | Human-readable label                         |
+| `dbOp`       | string      | The operation: `create`, `update`, `delete`  |
+| `model`      | string      | Associated model name                        |
+| `attributes` | object      | Attribute definitions (subset or full model) |
+
+---
+
+## ✏️ `attributes`
+
+Each attribute you define in the mutator can contain:
+
+- `type`: data type (same as model types)
+- `label`: display label
+- `generations`: how to auto-generate values
+- `validations`: field-level validation rules
+
+```json
+"attributes": {
+  "uuid": {
+    "type": "uuid",
+    "label": "ID",
+    "generations": [
+      { "type": "uuid" }
+    ],
+    "validations": [
+      {
+        "type": "required",
+        "message": "ID is required"
+      }
+    ]
+  },
+  "email": {
+    "type": "string",
+    "label": "Email",
+    "validations": [
+      {
+        "type": "required",
+        "message": "Email is required"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## 🧱 `schema` and `uiSchema`
+
+The `schema` and `uiSchema` are optional and renderer-specific. They follow the [JSON Schema](https://json-schema.org/) + [JSONForms](https://jsonforms.io/docs/uischema) format and allow you to define and control the form layout and behavior at a presentation level.
+
+These keys **do not impact API behavior**—they exist purely to help UI builders render meaningful, structured forms.
+
+### `schema`
+
+Describes the structure of the form data using JSON Schema.
+
+```json
+"schema": {
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "User Email"
+    },
+    "status": {
+      "type": "string",
+      "description": "User Status"
+    }
+  },
+  "required": ["email", "status"]
+}
+```
+
+### `uiSchema`
+
+Controls how fields are laid out and rendered.
+
+```json
+"uiSchema": {
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/email"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/status"
+    }
+  ]
+}
+```
+
+### Supported UI Elements
+
+| Type               | Description                    |
+| ------------------ | ------------------------------ |
+| `Control`          | Standard form field            |
+| `lens-text-input`  | Custom text input              |
+| `lens-dropdown`    | Custom dropdown for options    |
+| `lens-calendar`    | Date picker                    |
+| `lens-switch`      | Boolean toggle                 |
+| `VerticalLayout`   | Stack elements vertically      |
+| `HorizontalLayout` | Arrange elements side-by-side  |
+| `Group`            | Group of elements with a label |
+
+> 🔧 You can combine `schema` + `uiSchema` for custom layouts and keep `attributes` focused only on API-level validation and generation.
+
+---
+
+## 🔁 `dbOp`
+
+Supported database operations:
+
+- `"create"` — create a new row
+- `"update"` — update an existing row
+- `"delete"` — mark or remove a row
+
+> ℹ️ Use `generations` and `validations` to control how fields behave on a per-operation basis.
+
+---
+
+## 🧪 Example Mutator Spec
+
+```json
+
+```
+
+---
+
+## 📎 JSON Schema Reference
+
+👉 [`mutator.json`](https://locospec.com/schemas/mutator.json)

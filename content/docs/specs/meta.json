@@ -1,5 +1,15 @@
 {
   "title": "Specifications",
   "description": "Standard Schema",
-  "root": true
+  "root": true,
+  "pages": [
+    "index",
+    "glossary",
+    "model-schema",
+    "view-schema",
+    "entity-schema",
+    "mutator-schema",
+    "action-schema",
+    "filter-schema"
+  ]
 }

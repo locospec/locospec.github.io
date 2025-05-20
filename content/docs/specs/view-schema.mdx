@@ -1,0 +1,154 @@
+---
+title: View Schema
+description: Define table-based UI and query behavior for any model in Locospec.
+---
+
+A **View Schema** defines how data from a model should be queried, filtered, and presented—typically in a table, list, or kanban view. It’s where **search**, **pagination**, **filters**, and **row actions** come together.
+
+If the Model is your database, the View is your UI window into it.
+
+---
+
+## 🧩 Basic Structure
+
+```json
+{
+  "name": "active_users",
+  "type": "view",
+  "label": "Active Users",
+  "model": "user",
+  "attributes": ["uuid", "name", "email"],
+  "lensSimpleFilters": ["status", "created_at"],
+  "selectionType": "multiple"
+}
+```
+
+---
+
+## ⚙️ Required Fields
+
+| Field        | Type     | Description                                |
+| ------------ | -------- | ------------------------------------------ |
+| `name`       | string   | Unique ID for the view (snake/kebab case)  |
+| `type`       | `"view"` | Must always be `"view"`                    |
+| `label`      | string   | Human-readable label                       |
+| `model`      | string   | Name of the associated model               |
+| `attributes` | array    | List of model attributes shown in the view |
+
+---
+
+## 🔎 `lensSimpleFilters`
+
+Define which attributes should appear as quick filters in the UI. These are shallow filters like:
+
+```json
+"lensSimpleFilters": ["status", "role", "created_at"]
+```
+
+They reference attributes from the model (or related attributes via dot paths).
+
+---
+
+## 🧠 `scopes` and `allowedScopes`
+
+- `scopes` allows you to define **inline filters** using filter groups
+- `allowedScopes` restricts which **defined scopes** can be used in this view
+
+```json
+"allowedScopes": ["recent"],
+"scopes": {
+  "recent": {
+    "op": "and",
+    "conditions": [
+      { "attribute": "created_at", "op": "greater_than", "value": "2024-01-01" }
+    ]
+  }
+}
+```
+
+---
+
+## 🪄 `expand`
+
+You can declare expandable fields to show detailed info per row. This is useful when your view needs to show or filter based on fields from related models—without requiring additional queries.
+
+```json
+"expand": ["posts"]
+```
+
+This instructs Locospec to include the full related model's data in the result.
+
+---
+
+## ✅ `selectionType` & `selectionKey`
+
+Define whether users can select rows and what key represents the selected item.
+
+```json
+"selectionType": "multiple", // or "single" or "none"
+"selectionKey": "uuid"
+```
+
+This enables row-level selection in UI components.
+
+---
+
+## 🛠️ `actions`
+
+Configure row-level actions (like "Edit", "Delete", "view").
+
+```json
+"actions": {
+  "header": "Actions",
+  "items": [
+    {
+      "key": "edit",
+      "label": "Edit",
+      "icon": "pencil",
+      "url": "/users/{uuid}/edit",
+      "confirmation": false
+    }
+  ]
+}
+```
+
+Each action supports:
+
+- `key`, `label`, `icon`
+- `url` with path interpolation (`{uuid}`)
+- `confirmation`: whether to show a confirmation dialog
+
+Nested `options` (dropdown-style) are also supported per action.
+
+---
+
+## 🔢 `serialize`
+
+Show row numbers automatically with customizable options.
+
+```json
+"serialize": true
+```
+
+Or use an object for advanced config:
+
+```json
+"serialize": {
+  "header": "#",
+  "align": "center"
+}
+```
+
+---
+
+## 🧪 Example View Spec
+
+```json
+
+```
+
+---
+
+## 📎 JSON Schema Reference
+
+👉 [`view.json`](https://locospec.com/schemas/view.json)

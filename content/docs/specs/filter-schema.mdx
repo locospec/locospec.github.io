@@ -1,0 +1,133 @@
+---
+title: Filter Schema
+description: Define flexible, nested, and composable filters using conditions and logical groups.
+---
+
+Filters in Locospec define how data should be queried, constrained, and sliced. They’re used across **select actions**, **views**, **scopes**, and **search**, and support simple conditions as well as complex nested logic.
+
+The filter system is designed to be:
+
+- 🔄 Reusable
+- 🧱 Composable
+- 🔎 Deeply expressive
+
+---
+
+## ✅ Supported Filter Formats
+
+Locospec supports **three formats** for defining filters:
+
+### 1. Filter Group (nested, composable)
+
+```json
+{
+  "op": "and",
+  "conditions": [
+    { "attribute": "status", "op": "is", "value": "active" },
+    {
+      "op": "or",
+      "conditions": [
+        { "attribute": "role", "op": "is", "value": "admin" },
+        { "attribute": "role", "op": "is", "value": "manager" }
+      ]
+    }
+  ]
+}
+```
+
+> ✅ Best for complex, nested filters
+> ✅ Used in views, scopes, and select actions
+
+### 2. Array of Conditions (flat)
+
+```json
+[
+  { "attribute": "status", "op": "is", "value": "active" },
+  { "attribute": "verified", "op": "is", "value": true }
+]
+```
+
+> ✅ Flat structure, easy to parse
+> ✅ Recommended for dynamic builders (like frontend UIs)
+
+### 3. Key-Value Map (simple)
+
+```json
+{
+  "status": "active",
+  "verified": true
+}
+```
+
+> ✅ Quick and readable
+> ✅ Used in shorthand filters
+
+---
+
+## 🔧 Supported Operators
+
+| Operator                | Description                             |
+| ----------------------- | --------------------------------------- |
+| `is`                    | Exact match (`=`)                       |
+| `is_not`                | Not equal (`!=`)                        |
+| `greater_than`          | Greater than (`>`)                      |
+| `less_than`             | Less than (`<`)                         |
+| `greater_than_or_equal` | Greater than or equal (`>=`)            |
+| `less_than_or_equal`    | Less than or equal (`<=`)               |
+| `contains`              | Substring match (`LIKE %value%`)        |
+| `not_contains`          | Substring mismatch (`NOT LIKE %value%`) |
+| `is_any_of`             | Value is in list (`IN (...)`)           |
+| `is_none_of`            | Value not in list (`NOT IN (...)`)      |
+| `is_empty`              | Field is `null` or empty                |
+| `is_not_empty`          | Field is not `null`                     |
+
+---
+
+## 📂 Definition: `condition`
+
+```json
+{
+  "attribute": "status",
+  "op": "is",
+  "value": "active"
+}
+```
+
+| Key         | Type                                 | Description                         |
+| ----------- | ------------------------------------ | ----------------------------------- |
+| `attribute` | string                               | The field to apply the condition on |
+| `op`        | string                               | One of the supported operators      |
+| `value`     | string, number, boolean, array, null | The value to compare to             |
+
+---
+
+## 📚 Definition: `filterGroup`
+
+```json
+{
+  "op": "or",
+  "conditions": [
+    { "attribute": "type", "op": "is", "value": "internal" },
+    { "attribute": "type", "op": "is", "value": "external" }
+  ]
+}
+```
+
+| Key          | Type   | Description                                 |
+| ------------ | ------ | ------------------------------------------- |
+| `op`         | string | Logical operator: `"and"` or `"or"`         |
+| `conditions` | array  | Array of conditions or nested filter groups |
+
+---
+
+## 🧪 Example: Filter
+
+```json
+
+```
+
+---
+
+## 📎 JSON Schema Reference
+
+👉 [`common.json`](https://locospec.com/schemas/common.json#/definitions/filters)
