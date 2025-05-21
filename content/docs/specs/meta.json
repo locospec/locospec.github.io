@@ -4,12 +4,12 @@
   "root": true,
   "pages": [
     "index",
+    "glossary",
     "model-schema",
     "view-schema",
     "entity-schema",
     "mutator-schema",
     "action-schema",
-    "filter-schema",
-    "glossary"
+    "filter-schema"
   ]
 }

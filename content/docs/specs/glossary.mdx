@@ -67,12 +67,6 @@ Virtual fields that derive their value from other fields or relationships using 
 
 ---
 
-## 🔐 Permissions
-
-Access control at the spec level. If a user has access to a spec (model, view, entity, mutator), they can use it. Permissions are declared inline via `"permissions": ["read", "update"]`.
-
----
-
 ## 🗂 Registry
 
 The runtime system that loads, validates, and caches specs. There is a PHP registry and a TS registry, both capable of validating against schema standards.
@@ -81,7 +75,10 @@ The runtime system that loads, validates, and caches specs. There is a PHP regis
 
 ## 🔄 State Machine
 
-Used in advanced mutators or generators, the state machine enables conditional logic and data flow orchestration, similar to AWS Step Functions.
+The State Machine in Locospec is a JSON-defined task runner that enables conditional execution, branching logic, and context-driven workflows.
+It was originally introduced to handle advanced logic in mutators and views—allowing you to orchestrate multiple steps (like fetching data, validating, or transforming input) before committing an action.
+
+Later, it was extended to support generators as well—powering dynamic payload generation for insert/update operations.
 
 ---
 
@@ -91,18 +88,12 @@ The formal structure used to validate specs. Locospec follows [JSON Schema Draft
 
 ---
 
-## 🚀 Rocket
-
-A project scaffolding CLI/tool that connects to your database, reads structure, and auto-generates Locospec-compatible specs (model, view, entity, etc.).
-
----
-
 ## 🪪 Expand
 
 A way to declare which **relationships** should be resolved and included when querying data. Used in Views, Entities, and Select Actions.
 
 ---
 
-## 🖼 Display Modes
+## 🚀 Rocket
 
-Used in view specs to determine how data should be rendered — e.g., `table`, `list`, `kanban`, or `single`.
+A project scaffolding CLI/tool that connects to your database, reads structure, and auto-generates Locospec-compatible specs (model, view, entity, etc.).
