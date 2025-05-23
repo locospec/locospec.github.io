@@ -1,0 +1,148 @@
+---
+title: Relationship Spec
+description: Define model associations using hasOne, hasMany, belongsTo, and more.
+---
+
+The `relationships` section in a **Model Spec** defines how your model is connected to other models. These associations power **expansions**, **filtering across models**, and **relational dropdowns** in forms.
+
+Relationships are declared explicitly and support standard types like:
+
+- `has_one`
+- `has_many`
+- `belongs_to`
+
+---
+
+## 🔧 Basic Structure
+
+```json
+"relationships": {
+  "has_many": {
+    "posts": {
+      "model": "post",
+      "foreignKey": "user_uuid",
+      "localKey": "uuid"
+    }
+  },
+  "belongs_to": {
+    "role": {
+      "model": "role",
+      "foreignKey": "role_id",
+      "ownerKey": "uuid"
+    }
+  }
+}
+```
+
+---
+
+## 🧭 Relationship Types
+
+### 🧩 `has_many`
+
+Represents a **one-to-many** relationship.
+
+```json
+"has_many": {
+  "posts": {
+    "model": "post",
+    "foreignKey": "user_uuid",
+    "localKey": "uuid"
+  }
+}
+```
+
+- This means: A user has many posts.
+- `foreignKey` is on the child (`post.user_uuid`)
+- `localKey` is on the parent (`user.uuid`)
+
+---
+
+### 🧩 `has_one`
+
+Represents a **one-to-one** relationship.
+
+```json
+"has_one": {
+  "profile": {
+    "model": "profile",
+    "foreignKey": "user_uuid",
+    "localKey": "uuid"
+  }
+}
+```
+
+> Same structure as `has_many`, but for singular relation.
+
+---
+
+### 🧲 `belongs_to`
+
+Represents an **inverse relationship**, where the current model belongs to another.
+
+```json
+"belongs_to": {
+  "role": {
+    "model": "role",
+    "foreignKey": "role_id",
+    "ownerKey": "uuid"
+  }
+}
+```
+
+- `foreignKey` is on the current model (`user.role_id`)
+- `ownerKey` is on the related model (`role.uuid`)
+
+---
+
+## 🧠 Why Explicit Relationships?
+
+- They enable `expand` functionality in **Views** and **Entities**
+- They power **related dropdowns** in forms (like selecting a city for a user)
+- They allow building **cross-model filters and queries**
+- They define **directional joins** for internal engine resolution
+
+---
+
+## 🧪 Example: Complete Relationship Block
+
+```json
+"relationships": {
+  "has_one": {
+    "profile": {
+      "model": "profile",
+      "foreignKey": "user_uuid",
+      "localKey": "uuid"
+    }
+  },
+  "has_many": {
+    "orders": {
+      "model": "order",
+      "foreignKey": "user_id",
+      "localKey": "id"
+    }
+  },
+  "belongs_to": {
+    "company": {
+      "model": "company",
+      "foreignKey": "company_id",
+      "ownerKey": "uuid"
+    }
+  }
+}
+```
+
+---
+
+## 🔎 Where Relationships Are Used
+
+- **expand** in View & Entity Specs
+- **Mutators** for dynamic dropdowns and contextual forms
+- **Select/Filters** for deep querying across models
+- **Generators** (e.g. referencing related values or backfilling)
+
+---
+
+## 📎 Spec Reference
+
+👉 [`model.json#/properties/relationships`](https://locospec.com/specs/model.json#/properties/relationships)

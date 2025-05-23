@@ -33,7 +33,7 @@ Defines how a **single record** should be displayed using a sectioned layout. Ty
 
 ## ⚙️ Mutator Spec
 
-A declarative form specification for **creating, updating, or deleting** a record. Includes generators, validations, layout schema, and UI schema.
+A declarative form specification for **creating, updating, or deleting** a record. Includes generators, validations, layout spec, and UI spec.
 
 ---
 
@@ -69,7 +69,9 @@ Virtual fields that derive their value from other fields or relationships using 
 
 ## 🗂 Registry
 
-The runtime system that loads, validates, and caches specs. There is a PHP registry and a TS registry, both capable of validating against schema standards.
+The Registry is the runtime layer responsible for loading, validating, and caching specs. It ensures that each spec is structurally correct, complete, is available for execution, and can be reused efficiently across the system.
+
+> Think of it as the spec manager — it keeps everything typed, organized, and ready to run.
 
 ---
 

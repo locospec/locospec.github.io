@@ -1,0 +1,207 @@
+---
+title: Attribute Spec
+description: Define and configure fields for your model using types, validations, generations, and options.
+---
+
+The `attributes` key in a Model Spec defines the actual fields of your data model. Each attribute describes its **type**, **label**, and optionally its **validations**, **generations**, and **select options**.
+
+These are the building blocks that drive table views, forms, and validation logic across Locospec.
+
+---
+
+## 🔧 Basic Structure
+
+```json
+"attributes": {
+  "uuid": {
+    "type": "uuid",
+    "label": "ID",
+    "generations": [
+      {
+        "type": "uuid",
+        "operations": ["insert"]
+      }
+    ],
+    "validations": [
+      {
+        "type": "required",
+        "operations": ["insert"],
+        "message": "UUID is required"
+      }
+    ]
+  },
+  "status": {
+    "type": "string",
+    "label": "Status",
+    "options": [
+      { "title": "Active", "const": "active" },
+      { "title": "Inactive", "const": "inactive" }
+    ]
+  }
+}
+```
+
+---
+
+## ⚙️ Attribute Keys
+
+| Key           | Type   | Required | Description                                          |
+| ------------- | ------ | -------- | ---------------------------------------------------- |
+| `type`        | string | ✅       | Field data type (e.g. `string`, `uuid`, `timestamp`) |
+| `label`       | string | ✅       | Human-readable label for UIs                         |
+| `options`     | array  | ❌       | Enum options (for dropdowns)                         |
+| `generations` | array  | ❌       | Rules for auto-generating values at runtime          |
+| `validations` | array  | ❌       | Rules for validating data during insert/update       |
+
+---
+
+## 🔢 Supported Attribute Types
+
+| Type        | Description                       |
+| ----------- | --------------------------------- |
+| `id`        | Auto-incrementing primary key     |
+| `uuid`      | Universally unique identifier     |
+| `ulid`      | Lexicographically sortable ID     |
+| `string`    | Short text                        |
+| `text`      | Long text (multi-line)            |
+| `timestamp` | ISO 8601 datetime string          |
+| `date`      | Date-only (YYYY-MM-DD)            |
+| `boolean`   | True/false value                  |
+| `integer`   | Whole numbers                     |
+| `decimal`   | Floating-point numbers            |
+| `json`      | JSON object/array                 |
+| `jsonb`     | Binary JSON (Postgres specific)   |
+| `object`    | Structured data (used in nesting) |
+
+---
+
+## 🎯 `options`
+
+The `options` field defines a fixed set of allowed values for a field—typically used when the field behaves like a **dropdown**, or **select**.
+
+This is commonly used for columns like `status`, `type`, or `category`, where the values come from a known list.
+
+```json
+"status": {
+  "type": "string",
+  "label": "Status",
+  "options": [
+    { "title": "Active", "const": "active" },
+    { "title": "Pending", "const": "pending" },
+    { "title": "In Progress", "const": "inprogress" }
+  ]
+}
+```
+
+Each option contains:
+
+| Key     | Description                         |
+| ------- | ----------------------------------- |
+| `title` | Human-readable label for UI         |
+| `const` | Actual value stored in the database |
+
+> 🧠 Think of `options` as a structured enum: you control what the user sees (`title`) and what the system stores (`const`).
+
+---
+
+## 🔁 `generations`
+
+Auto-generate field values based on context and operation.
+
+```json
+"generations": [
+  {
+    "type": "uuid",
+    "operations": ["insert"]
+  },
+  {
+    "type": "uniqueSlugGenerator",
+    "operations": ["insert"],
+    "source": "name"
+  },
+  {
+    "type": "datetime",
+    "operations": ["insert", "update"],
+    "value": "now"
+  },
+]
+```
+
+| Key          | Description                                                                      |
+| ------------ | -------------------------------------------------------------------------------- |
+| `type`       | Generation type (`uuid`, `uniqueSlugGenerator`, `datetime`, `stateMachine` etc.) |
+| `operations` | Operations during which generation occurs                                        |
+| `source`     | (optional) Source field for generation (e.g., slug from name)                    |
+| `value`      | (optional) Value to use (e.g., `"now"`)                                          |
+
+---
+
+## ✅ `validations`
+
+Define rules for validating the field during `insert`, `update`, or `delete`.
+
+```json
+"validations": [
+  {
+    "type": "required",
+    "operations": ["insert"],
+    "message": "This field is required"
+  },
+  {
+    "type": "regex:/^[a-z0-9_-]+$/",
+    "operations": ["insert", "update"],
+    "message": "Only lowercase, numbers, dashes and underscores allowed"
+  }
+]
+```
+
+| Key          | Description                                          |
+| ------------ | ---------------------------------------------------- |
+| `type`       | Validation rule (e.g. `required`, `regex`, `unique`) |
+| `operations` | Applicable operations: `insert`, `update`, `delete`  |
+| `message`    | Error message if validation fails                    |
+
+---
+
+## 🧪 Example: Complete Attribute
+
+```json
+"slug": {
+  "type": "string",
+  "label": "Slug",
+  "generations": [
+    {
+      "type": "slugGenerator",
+      "operations": ["insert"],
+      "source": "name"
+    }
+  ],
+  "validations": [
+    {
+      "type": "required",
+      "operations": ["insert"],
+      "message": "Slug is required"
+    },
+    {
+      "type": "unique",
+      "operations": ["insert", "update"],
+      "message": "Slug must be unique"
+    }
+  ]
+}
+```
+
+---
+
+## 🔎 Where This Is Used
+
+- **Model Specs** → full field definition
+- **Mutator Specs** → form generation + validations
+- **Action Payloads** → value resolution and generation
+- **View & Entity Specs** → UI display and formatting
+
+---
+
+## 📎 Spec Reference
+
+👉 [`model.json#/properties/attributes`](https://locospec.com/specs/model.json#/properties/attributes)

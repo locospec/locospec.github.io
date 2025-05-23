@@ -1,0 +1,95 @@
+---
+title: Scope Spec
+description: Reusable named filters for models, used across views, actions, and queries.
+---
+
+**Scopes** allow you to define reusable, named filters inside a **Model Spec**. These filters can be referenced in views, queries, or actions to avoid repeating the same logic multiple times.
+
+They make it easy to define common business rules like:
+
+- `"active"` users
+- `"verified"` accounts
+- `"inProgress"` workflows
+
+---
+
+## 🔧 Basic Structure
+
+```json
+"scopes": {
+  "active": {
+    "op": "and",
+    "conditions": [
+      { "attribute": "status", "op": "is", "value": "active" }
+    ]
+  },
+  "verified": {
+    "op": "and",
+    "conditions": [
+      { "attribute": "verified", "op": "is", "value": true }
+    ]
+  }
+}
+```
+
+Each key under `scopes` is the name of the scope and its value is a **filter group**, just like the filter syntax used in actions.
+
+---
+
+## ✅ Filter Syntax Supported
+
+Scopes use the same flexible filter definition as all Locospec filters:
+
+- Filter Groups (with `op: and/or`)
+- Flat arrays of conditions
+- Shorthand key-value maps
+
+> See [Filter Schema](/specifications/filters) for full details.
+
+---
+
+## 📌 Where Scopes Are Used
+
+- In **View Specs** (as part of filters or default conditions)
+- In **Select actions** using the `scopes` key
+- In **Context-resolved filters** where reusable logic is needed
+
+---
+
+## 🧪 Example: Full Usage in Model Spec
+
+```json
+{
+  "name": "user",
+  "type": "model",
+  "label": "User",
+  "config": { ... },
+  "attributes": { ... },
+  "scopes": {
+    "active": {
+      "op": "and",
+      "conditions": [
+        { "attribute": "status", "op": "is", "value": "active" }
+      ]
+    },
+    "adminOnly": {
+      "op": "and",
+      "conditions": [
+        { "attribute": "role", "op": "is", "value": "admin" }
+      ]
+    }
+  }
+}
+```
+
+---
+
+## 🔁 Combining with Filters
+
+You can apply a scope and also pass additional filters. The scope becomes the **base**, and your filters layer on top.
+
+---
+
+## 📎 Spec Reference
+
+👉 [`model.json#/properties/scopes`](https://locospec.com/specs/model.json#/properties/scopes)

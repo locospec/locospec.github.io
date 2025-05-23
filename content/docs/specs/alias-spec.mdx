@@ -1,0 +1,109 @@
+---
+title: Alias Spec
+description: Define virtual fields using path references or JMESPath transforms.
+---
+
+**Aliases** are virtual attributes defined in the **Model Spec** that allow you to:
+
+- Reference deeply nested relationships
+- Apply lightweight transformations to fields
+- Expose computed values for display or filtering
+
+They are **read-only**, derived fields that do not exist in the database, but are resolved dynamically during query or rendering time.
+
+---
+
+## 🔧 Basic Structure
+
+```json
+"aliases": {
+  "role_name": {
+    "source": "role.name"
+  },
+  "full_name": {
+    "transform": "concat(first_name, ' ', last_name)"
+  }
+}
+```
+
+---
+
+## 🔑 Keys
+
+| Key         | Type   | Description                                                             |
+| ----------- | ------ | ----------------------------------------------------------------------- |
+| `source`    | string | Dot-notated path to another attribute (can include relationships)       |
+| `transform` | string | A [JMESPath](https://jmespath.org) expression used to compute the value |
+
+You can use either `source` or `transform`, but not both.
+
+---
+
+## 📦 `source`
+
+Simple alias to an existing field or nested relationship.
+
+```json
+"aliases": {
+  "approver_email": {
+    "source": "meta.approver[0].email"
+  }
+}
+```
+
+Useful when your UI needs a flat field but the data is nested.
+
+---
+
+## 🔁 `transform`
+
+Use a JMESPath expression to apply logic.
+
+```json
+"aliases": {
+  "full_name": {
+    "transform": "concat(first_name, ' ', last_name)"
+  }
+}
+```
+
+Supported functions include:
+
+- `concat`, `join`, `map`, `sort`
+- `filters`, `exists`, `contains`
+- And more via [JMESPath custom runtime](https://jmespath.org/specification.html)
+
+> 🧠 Transforms allow you to prepare data for read-heavy UIs without modifying your actual schema.
+
+---
+
+## 🧪 Example: Complete Aliases Block
+
+```json
+"aliases": {
+  "role_name": {
+    "source": "role.name"
+  },
+  "creator_email": {
+    "source": "meta.created_by.email"
+  },
+  "full_name": {
+    "transform": "join(' ', [first_name, last_name])"
+  },
+}
+```
+
+---
+
+## 🔎 Where Aliases Are Used
+
+- In **View Specs** and **Entity Specs** as displayable fields
+- In **Filters** and **Scopes** for querying virtual fields
+- In **Search** definitions
+- In **Transformations** for data transformation.
+
+---
+
+## 📎 Spec Reference
+
+👉 [`model.json#/properties/aliases`](https://locospec.com/specs/model.json#/properties/aliases)
