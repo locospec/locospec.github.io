@@ -46,6 +46,24 @@ In a growing codebase, it’s easy for logic to scatter:
 
 ---
 
+## 🧠 How Locospec Works
+
+Locospec is built on a composable spec system. Developers define **models**, and layer on **views**, **entities**, and **mutators**. Everything is declared in JSON specs.
+
+These specs are loaded and executed by the **Engine**, which powers:
+
+- Fully searchable tables, lists, and kanbans
+- Detail views like cards or summaries
+- Forms with validations, state machines, and generators
+- Deep filtering and cross-model queries
+- Auto-generated CRUD APIs
+
+![How Locospec Works](/assets/locospec-how.png)
+
+> You define the structure, the engine powers the experience.
+
+---
+
 ## 🧱 What You’ll Learn in This Section
 
 This section is your spec bible. You’ll find the **complete JSON schema** for each spec type and learn how to:
