@@ -1,0 +1,6 @@
+{
+  "title": "Guide",
+  "description": "Implementation Guide",
+  "root": true,
+  "pages": ["index", "filters"]
+}
