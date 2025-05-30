@@ -3,15 +3,13 @@ title: Filters
 description: Implementation guide for Locospec filters
 ---
 
-# 🎯 Filter Implementation Guide
-
 This guide explains how to implement the Locospec filter system based on the provided class diagram. The filter system is designed to be flexible, composable, and capable of handling complex query conditions.
 
 ## 📊 Class Diagram
 
 ```mermaid
 classDiagram
-    namespace Schema{
+    namespace Filterss {
         class FilterInterface {
             <<interface>>
             +toArray() array
@@ -57,7 +55,7 @@ classDiagram
             +merge(Filters ...$filters) Filters
         }
 
-        class FilterContextResolver {
+        class ContextResolver {
             -array $context
             +__construct(array $context)
             +resolve(Filters $filters) Filters
@@ -67,7 +65,7 @@ classDiagram
             -resolveValue(mixed $value) mixed
         }
 
-        class FilterAliasResolver {
+        class AliasResolver {
             -array $aliases
             +__construct(array $aliases)
             +resolve(Filters $filters) Filters
@@ -75,6 +73,18 @@ classDiagram
             -resolveGroup(FilterGroup $group) FilterGroup
             -resolvePrimitiveSet(PrimitiveFilterSet $set) PrimitiveFilterSet
             -resolveAttribute(string $attribute) string
+        }
+
+        class RelationshipResolver {
+            -ModelDefinition $model
+            -DatabaseOperationsCollection $dbOps
+            -RegistryManager $registryManager
+            +__construct(ModelDefinition $model, DatabaseOperationsCollection $dbOps, RegistryManager $registryManager)
+            +resolve(Filters $filters) Filters
+            -resolveCondition(Condition $condition) Condition|FilterGroup
+            -resolveGroup(FilterGroup $group) FilterGroup
+            -resolvePrimitiveSet(PrimitiveFilterSet $set) PrimitiveFilterSet
+            -getExtractAndPointAttributes(Relationship $relationship) array
         }
 
         class ComparisonOperator {
@@ -93,6 +103,7 @@ classDiagram
             NOT_IN
             BETWEEN
             NOT_BETWEEN
+            IS_ANY_OF
         }
 
         class LogicalOperator {
@@ -108,14 +119,21 @@ classDiagram
     Filters --> ComparisonOperator : uses
     Filters --> LogicalOperator : uses
     FilterGroup --> FilterInterface : contains
-    FilterContextResolver --> Filters : resolves
-    FilterContextResolver --> Condition : resolves
-    FilterContextResolver --> FilterGroup : resolves
-    FilterContextResolver --> PrimitiveFilterSet : resolves
-    FilterAliasResolver --> Filters : resolves
-    FilterAliasResolver --> Condition : resolves
-    FilterAliasResolver --> FilterGroup : resolves
-    FilterAliasResolver --> PrimitiveFilterSet : resolves
+    ContextResolver --> Filters : resolves
+    ContextResolver --> Condition : resolves
+    ContextResolver --> FilterGroup : resolves
+    ContextResolver --> PrimitiveFilterSet : resolves
+    AliasResolver --> Filters : resolves
+    AliasResolver --> Condition : resolves
+    AliasResolver --> FilterGroup : resolves
+    AliasResolver --> PrimitiveFilterSet : resolves
+    RelationshipResolver --> Filters : resolves
+    RelationshipResolver --> Condition : resolves
+    RelationshipResolver --> FilterGroup : resolves
+    RelationshipResolver --> PrimitiveFilterSet : resolves
+    RelationshipResolver --> ModelDefinition : uses
+    RelationshipResolver --> DatabaseOperationsCollection : uses
+    RelationshipResolver --> RegistryManager : uses
 ```
 
 ## 🏗️ Core Components
@@ -166,7 +184,7 @@ The main entry point for filter operations:
 
 ## 🔄 Resolvers
 
-### 1. FilterContextResolver
+### 1. ContextResolver
 
 Resolves dynamic values in filters:
 
@@ -175,7 +193,7 @@ Resolves dynamic values in filters:
 - Maintains context state
 - Resolves all filter types
 
-### 2. FilterAliasResolver
+### 2. AliasResolver
 
 Manages attribute aliases:
 
@@ -183,6 +201,15 @@ Manages attribute aliases:
 - Supports complex alias patterns
 - Resolves aliases in all filter types
 - Maintains alias definitions
+
+### 3. RelationshipResolver
+
+Handles relationship-based filters:
+
+- Resolves filters across related models
+- Manages database operations for relationships
+- Uses registry for model definitions
+- Extracts and points to relationship attributes
 
 ## 🎨 Implementation Approach
 
@@ -207,7 +234,7 @@ Manages attribute aliases:
 ```plaintext
 1. Create resolver instances
 2. Pass filters through resolvers
-3. Handle context/alias resolution
+3. Handle context/alias/relationship resolution
 4. Return resolved filters
 ```
 
@@ -231,8 +258,16 @@ Filters::group(LogicalOperator::AND)
 
 ```plaintext
 $context = ['user_id' => 123];
-$resolver = new FilterContextResolver($context);
+$resolver = new ContextResolver($context);
 $filters = Filters::condition('created_by', ComparisonOperator::IS, '{user_id}');
+$resolved = $resolver->resolve($filters);
+```
+
+### 4. With Relationships
+
+```plaintext
+$resolver = new RelationshipResolver($model, $dbOps, $registry);
+$filters = Filters::condition('user.profile.status', ComparisonOperator::IS, 'active');
 $resolved = $resolver->resolve($filters);
 ```
 
@@ -268,6 +303,12 @@ $resolved = $resolver->resolve($filters);
    - Minimize object creation
 
 4. **Error Handling**
+
    - Validate input parameters
    - Handle resolution errors
    - Provide meaningful error messages
+
+5. **Relationship Handling**
+   - Validate relationship existence
+   - Handle circular references
+   - Optimize relationship queries
